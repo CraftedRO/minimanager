@@ -57,7 +57,7 @@ $dbr = $realm_db["name"];
 $sql = new DBLayer($hostr, $userr, $passwordr, $dbr);
 $query = $sql->query("SELECT name FROM realmlist WHERE id = ".$realm_id);
 $realm_name = $sql->fetch_assoc($query);
-$realm_name = htmlentities($realm_name["name"]);
+$realm_name = $sql->num_rows() > 0 ? htmlentities($realm_name["name"]) : "";
 
 $gm_show_online = $gm_online;
 $gm_show_online_only_gmoff = $map_gm_show_online_only_gmoff;
@@ -78,3 +78,4 @@ $maps_for_points = "0,1,530,571,609";
 $img_base = "../img/map/";
 $img_base2 = "../img/c_icons/";
 ?>
+
