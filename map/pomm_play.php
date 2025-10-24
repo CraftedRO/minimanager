@@ -55,7 +55,7 @@ if(!$characters_db->isValid())
     exit();
 }
 $characters_db->query("SET NAMES $database_encoding");
-$query = $characters_db->query("SELECT `groups`.`leaderGuid`, `group_member`.`memberGuid` FROM `groups` LEFT JOIN `group_member` ON `groups.`guid` = `group_member`.`guid` WHERE `memberGuid` IN(SELECT `guid` FROM `characters` WHERE `online`='1')");
+$query = $characters_db->query("SELECT `groups`.`leaderGuid`, `group_member`.`memberGuid` FROM `groups` LEFT JOIN `group_member` ON `groups`.`guid` = `group_member`.`guid` WHERE `memberGuid` IN(SELECT `guid` FROM `characters` WHERE `online`='1')");
 if($query)
     while($result = $characters_db->fetch_assoc($query))
         $groups[$result['memberGuid']] = $result['leaderGuid'];
@@ -155,3 +155,4 @@ $res['status'] = $status;
 
 $_RESULT = $res;
 ?>
+
