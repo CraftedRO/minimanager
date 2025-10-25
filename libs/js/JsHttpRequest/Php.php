@@ -34,8 +34,7 @@ class Subsys_JsHttpRequest_Php
    * to script output buffer. As a result - script will always return
    * correct JavaScript code, even in case of fatal errors.
    */
-  function Subsys_JsHttpRequest_Php($enc)
-  {
+  public function __construct($enc) {
     // QUERY_STRING is in form: PHPSESSID=<sid>&a=aaa&b=bbb&<id>
     // where <id> is request ID, <sid> - session ID (if present),
     // PHPSESSID - session parameter name (by default = "PHPSESSID").
@@ -58,7 +57,7 @@ class Subsys_JsHttpRequest_Php
     $this->UNIQ_HASH = md5(microtime().getmypid());
     ini_set('error_prepend_string', ini_get('error_prepend_string').$this->UNIQ_HASH);
     ini_set('error_append_string',  ini_get('error_append_string') .$this->UNIQ_HASH);
-    ob_start([&$this, "_obHandler"]);
+    ob_start(array(&$this, "_obHandler"));
 
     // Set up encoding.
     $this->setEncoding($enc);
@@ -66,8 +65,7 @@ class Subsys_JsHttpRequest_Php
     // Check if headers are already sent (see Content-Type library usage).
     // If true - generate debug message and exit.
     $file = $line = null;
-    if (headers_sent($file, $line))
-    {
+    if (headers_sent($file, $line)) {
       trigger_error(
         "HTTP headers are already sent" . ($line !== null? " in $file on line $line" : "") . ". "
           . "Possibly you have extra spaces (or newlines) before first line of the script or any library. "
@@ -127,7 +125,7 @@ class Subsys_JsHttpRequest_Php
   function quoteInput($s)
   {
     if ($this->SCRIPT_DECODE_MODE == 'entities')
-      return str_replace(['"', '<', '>'], ['&quot;', '&lt;', '&gt;'], $s);
+      return str_replace(array('"', '<', '>'), array('&quot;', '&lt;', '&gt;'), $s);
     else
       return htmlspecialchars($s);
   }
@@ -155,7 +153,7 @@ class Subsys_JsHttpRequest_Php
      {
        $isList = false; break;
      }
-    $result = [];
+    $result = array();
     if ($isList)
     {
       foreach ($a as $v)
@@ -185,7 +183,7 @@ class Subsys_JsHttpRequest_Php
     // is NOT default "application/x-www-form-urlencoded"!!!
     // Library frontend sets "application/octet-stream" for that purpose,
     // see JavaScript code.
-    foreach (['_GET'=>$_SERVER['QUERY_STRING'], '_POST'=>@$GLOBALS['HTTP_RAW_POST_DATA']] as $dst=> $src)
+    foreach (array('_GET'=>$_SERVER['QUERY_STRING'], '_POST'=>@$GLOBALS['HTTP_RAW_POST_DATA']) as $dst=>$src)
     {
       if (isset($GLOBALS[$dst]))
       {
@@ -198,9 +196,9 @@ class Subsys_JsHttpRequest_Php
       }
     }
     $_REQUEST =
-      (isset($_COOKIE)? $_COOKIE : []) +
-      (isset($_POST)? $_POST : []) +
-      (isset($_GET)? $_GET : []);
+      (isset($_COOKIE)? $_COOKIE : array()) +
+      (isset($_POST)? $_POST : array()) +
+      (isset($_GET)? $_GET : array());
     if (ini_get('register_globals'))
     {
       // TODO?
@@ -247,7 +245,7 @@ class Subsys_JsHttpRequest_Php
   {
     if (is_array($data))
     {
-      $d = [];
+      $d = array();
       foreach ($data as $k=>$v)
       {
         $d[$this->_ucs2EntitiesDecode($k)] = $this->_ucs2EntitiesDecode($v);
@@ -258,7 +256,7 @@ class Subsys_JsHttpRequest_Php
     {
       if (strpos($data, '%u') !== false)
       { // improve speed
-        $data = preg_replace_callback('/%u([0-9A-F]{1,4})/si', [&$this, '_ucs2EntitiesDecodeCallback'], $data);
+        $data = preg_replace_callback('/%u([0-9A-F]{1,4})/si', array(&$this, '_ucs2EntitiesDecodeCallback'), $data);
       }
       return $data;
     }
@@ -327,10 +325,10 @@ class Subsys_JsHttpRequest_Php
   /**
    * UCS-2BE -> 1-byte encodings (from #128).
    */
-  var $_encTables =
-      [
-    'windows-1251' =>
-        [
+  var $_encTables = array
+  (
+    'windows-1251' => array
+    (
       0x0402, 0x0403, 0x201A, 0x0453, 0x201E, 0x2026, 0x2020, 0x2021,
       0x20AC, 0x2030, 0x0409, 0x2039, 0x040A, 0x040C, 0x040B, 0x040F,
       0x0452, 0x2018, 0x2019, 0x201C, 0x201D, 0x2022, 0x2013, 0x2014,
@@ -347,9 +345,9 @@ class Subsys_JsHttpRequest_Php
       0x0438, 0x0439, 0x043A, 0x043B, 0x043C, 0x043D, 0x043E, 0x043F,
       0x0440, 0x0441, 0x0442, 0x0443, 0x0444, 0x0445, 0x0446, 0x0447,
       0x0448, 0x0449, 0x044A, 0x044B, 0x044C, 0x044D, 0x044E, 0x044F,
-        ],
-    'koi8-r' =>
-        [
+    ),
+    'koi8-r' => array
+    (
       0x2500, 0x2502, 0x250C, 0x2510, 0x2514, 0x2518, 0x251C, 0x2524,
       0x252C, 0x2534, 0x253C, 0x2580, 0x2584, 0x2588, 0x258C, 0x2590,
       0x2591, 0x2592, 0x2593, 0x2320, 0x25A0, 0x2219, 0x221A, 0x2248,
@@ -366,8 +364,8 @@ class Subsys_JsHttpRequest_Php
       0x0425, 0x0418, 0x0419, 0x041A, 0x041B, 0x041C, 0x041d, 0x041E,
       0x041F, 0x042F, 0x0420, 0x0421, 0x0422, 0x0423, 0x0416, 0x0412,
       0x042C, 0x042B, 0x0417, 0x0428, 0x042d, 0x0429, 0x0427, 0x042A
-        ],
-      ];
+    ),
+  );
 }
 
 ?>
