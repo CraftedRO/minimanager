@@ -34,7 +34,7 @@ class Subsys_JsHttpRequest_Php
    * to script output buffer. As a result - script will always return
    * correct JavaScript code, even in case of fatal errors.
    */
-  function Subsys_JsHttpRequest_Php($enc)
+  public function __construct($enc)
   {
     // QUERY_STRING is in form: PHPSESSID=<sid>&a=aaa&b=bbb&<id>
     // where <id> is request ID, <sid> - session ID (if present),

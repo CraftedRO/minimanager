@@ -319,9 +319,7 @@ $menu_array =
       ['top100.php',      'top100', 0,5,5,5],
       ['forum.php',      'forums', 0,5,5,5], // has own level security, but has yet to honor the new security system.
       ['stat.php',  'statistics', 0,5,5,5],
-      ['javascript:void(0);" onclick="window.open
-              (\'./map/\', \'./map/\', \'toolbar=0, location=0, directories=0, status=0, menubar=0, scrollbars=no, resizable=no, copyhistory=1, width=966, height=732\')',
-                               'player_map', 0,5,5,5], // this page has yet to honor the new security system, but it is a read only page
+      ['map',  'player_map', 0,5,5,5], // this page has yet to honor the new security system, but it is a read only page
       ],
   ],
   ['#',      'tools',

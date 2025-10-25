@@ -39,7 +39,7 @@ if (isset($_COOKIE["lang"]))
 else
     $lang = $language;
 
-$database_encoding = $site_encoding;
+$database_encoding = $realm_db['encoding'];
 
 $server = $server_arr[$realm_id]["addr"];
 $port = $server_arr[$realm_id]["game_port"];
@@ -57,7 +57,7 @@ $dbr = $realm_db["name"];
 $sql = new DBLayer($hostr, $userr, $passwordr, $dbr);
 $query = $sql->query("SELECT name FROM realmlist WHERE id = ".$realm_id);
 $realm_name = $sql->fetch_assoc($query);
-$realm_name = $sql->num_rows() > 0 ? htmlentities($realm_name["name"]) : "";
+$realm_name = htmlentities($realm_name["name"]);
 
 $gm_show_online = $gm_online;
 $gm_show_online_only_gmoff = $map_gm_show_online_only_gmoff;
